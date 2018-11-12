@@ -3,7 +3,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import nock from 'nock';
 import app from '../src/app';
-import { fcHost, checkTokenPath } from '../config/config';
+import config from '../config';
 import {
   validTokenConf, malformedTokenConf, expiredTokenConf, initializeMock,
 } from '../mock/france-connect';
@@ -40,8 +40,8 @@ describe('checkAccessToken middleware', () => {
 
   it('should return 502 when not able to connect to FranceConnect', (done) => {
     nock.cleanAll();
-    nock(fcHost)
-      .post(checkTokenPath, { token: validTokenConf.token })
+    nock(config.fcHost)
+      .post(config.checkTokenPath, { token: validTokenConf.token })
       .replyWithError({ code: 'ECONNREFUSED' });
 
     chai.request(app)
