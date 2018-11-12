@@ -9,8 +9,8 @@ The way a data provider works is explained in [FranceConnect documentation](http
 Run the following commands:
 
 ```bash
-git clone git@github.com:france-connect/data-providers-examples.git
-cd data-providers-examples/nodejs_ES6
+git clone git@github.com:france-connect/data-provider-example.git
+cd data-provider-example
 npm install
 ```
 
@@ -24,8 +24,8 @@ npm start
 
 Note that the previous installation use a local mock of FranceConnect integration server.
 
-If you are to use this app alongside the [service provider example](https://github.com/france-connect/identity-providers-examples/blob/master/NodeJSES6/data/database.csv),
-you must set `"useFcMock": false,` in config/config.json then relaunch the server.
+If you are to use this app alongside the [service provider example](https://github.com/france-connect/identity-provider-example),
+run the server with `USE_FC_MOCK=false npm start`.
 
 By doing this you will tell the app to remotely verify the tokens against the actual FranceConnect integration server.
 
