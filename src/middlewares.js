@@ -1,9 +1,9 @@
 import axios from 'axios';
 import config from '../config';
-import { getAuthorizationToken } from './utils';
+import { getAccessToken } from './utils';
 
 const checkAccessToken = async (req, res, next) => {
-  const accessToken = getAuthorizationToken(req);
+  const accessToken = getAccessToken(req);
   if (!accessToken) {
     return res.sendStatus(400);
   }

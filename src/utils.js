@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const getAuthorizationToken = (req) => {
+export const getAccessToken = (req) => {
   if (!req.header('Authorization')) {
     return null;
   }
