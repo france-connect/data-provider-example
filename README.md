@@ -1,4 +1,4 @@
-# data-providers-examples
+# data-provider-example
 
 An example of Data Provider for FranceConnect.
 
