@@ -13,6 +13,8 @@ export const getAccessToken = (req) => {
   return authorizationHeaderParts[1];
 };
 
+export const getFirstGivenName = str => str.split(' ')[0];
+
 export const cleanUpAccentedChars = str => str
   .replace(/[ÀÁÂÃÄÅ]/g, 'A')
   .replace(/[àáâãäå]/g, 'a')

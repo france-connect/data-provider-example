@@ -3,7 +3,7 @@ import _, {
 } from 'lodash';
 import database from './database';
 import {
-  cleanUpAccentedChars, getDay, getMonth, getTitle, getYear,
+  cleanUpAccentedChars, getDay, getFirstGivenName, getMonth, getTitle, getYear,
 } from './utils';
 
 const SCOPE_TO_PROPERTIES = {
@@ -105,7 +105,7 @@ export const reconcile = (userFromFranceConnect) => {
      * For example, "Cårløs Nunez" and "Carlós Nuñez" will match the same database entry
      * So, we have to make additional check to make sure we address the right person.
      */
-    prenom: cleanUpAccentedChars(userFromFranceConnect.given_name).toUpperCase(),
+    prenom: cleanUpAccentedChars(getFirstGivenName(userFromFranceConnect.given_name)).toUpperCase(),
     nomDeNaissance: cleanUpAccentedChars(userFromFranceConnect.family_name).toUpperCase(),
     /*
      * In this implementation, we also check the birth date, the gender and the birth country.
