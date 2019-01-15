@@ -1,5 +1,5 @@
 import _, {
-  clone, intersection, isEmpty, zipObject,
+  intersection, isEmpty, mapKeys, set, transform,
 } from 'lodash';
 import database from './database';
 import {
@@ -10,9 +10,13 @@ const SCOPE_TO_PROPERTIES = {
   // These 2 scopes are fictitious and are meant to be used for experimentation purpose.
   dgfip_nbpac: ['nombreDePersonnesACharge', 'nombreDePersonnesAChargeF', 'nombreDePersonnesAChargeH', 'nombreDePersonnesAChargeR', 'nombreDePersonnesAChargeJ', 'nombreDePersonnesAChargeN', 'nombreDePersonnesAChargeP'],
   dgfip_nbpacf: ['nombreDePersonnesAChargeF'],
-  // These 2 scopes are the official DGFIP scopes
-  dgfip_revenu_fiscal_de_reference_n_moins_1: ['nombreDeParts', 'revenuFiscalDeReference'],
-  dgfip_adresse_fiscale_de_taxation_n_moins_1: ['adresseFiscaleDeTaxation'],
+
+  // These 5 scopes are the official DGFIP scopes
+  dgfip_rfr: ['revenuFiscalDeReference'], // DGFIP - Revenu fiscal de référence (RFR)
+  dgfip_nbpart: ['nombreDeParts'], // DGFIP - nombre de parts
+  dgfip_sitfam: ['situationDeFamille'], // DGFIP - situation de famille
+  dgfip_pac: ['nombreDePersonnesACharge', 'nombreDePersonnesAChargeF', 'nombreDePersonnesAChargeH', 'nombreDePersonnesAChargeR', 'nombreDePersonnesAChargeJ', 'nombreDePersonnesAChargeN', 'nombreDePersonnesAChargeP'], // DGFIP - composition du foyer fiscal
+  dgfip_aft: ['adresseFiscaleDeTaxation'], // DGFIP - adresse fiscale de taxation au 1er janvier
 };
 
 /**
@@ -55,19 +59,66 @@ export const filter = (userScopes, databaseEntry) => {
   return _.pick(databaseEntry, propertiesToReturn);
 };
 
+const DGFIP_LABELS = {
+  SPI: 'SPI',
+  nomDeNaissance: 'nomDeNaissance',
+  prenom: 'prenom',
+  titre: 'titre',
+  AAAA: 'AAAA',
+  MM: 'MM',
+  JJ: 'JJ',
+  departementDeNaissance: 'departementDeNaissance',
+  codeCommune: 'codeCommune',
+  regionDeNaissance: 'regionDeNaissance',
+  codePaysDeNaissance: 'codePaysDeNaissance',
+  revenuFiscalDeReference: 'rfr',
+  nombreDeParts: 'nbPart',
+  situationDeFamille: 'sitFam',
+  nomDeNaissanceDuDeclarant1: 'nmNaiDec1',
+  nomDUsageDuDeclarant1: 'nmUsaDec1',
+  prenomsDuDeclarant1: 'prnmDec1',
+  nomDeNaissanceDuDeclarant2: 'nmNaiDec2',
+  nomDUsageDuDeclarant2: 'nmUsaDec2',
+  prenomsDuDeclarant2: 'prnmDec2',
+  situationParentIsole: 'sitParIso',
+  adresseFiscaleDeTaxationComplementAdresse: 'aftDetail.complementAdresse',
+  adresseFiscaleDeTaxationVoie: 'aftDetail.voie',
+  adresseFiscaleDeTaxationCodePostal: 'aftDetail.codePostal',
+  adresseFiscaleDeTaxationCommune: 'aftDetail.commune',
+  nombreDePersonnesACharge: 'pac.nbPac',
+  nombreDePersonnesAChargeF: 'pac.nbPacF',
+  nombreDePersonnesAChargeH: 'pac.nbPacH',
+  nombreDePersonnesAChargeR: 'pac.nbPacR',
+  nombreDePersonnesAChargeJ: 'pac.nbPacJ',
+  nombreDePersonnesAChargeN: 'pac.nbPacN',
+  nombreDePersonnesAChargeP: 'pac.nbPacP',
+};
+
 export const format = (databaseEntry) => {
-  if (!databaseEntry.adresseFiscaleDeTaxation) {
-    return databaseEntry;
+  //   { nombreDeParts: '3', revenuFiscalDeReference: '15000', nombreDePersonnesACharge: '0' }
+  const databaseEntryWithDgfipLabels = mapKeys(
+    databaseEntry,
+    (value, key) => DGFIP_LABELS[key] || key,
+  );
+  // { nbPart: '3', rfr: '15000', 'pac.nbPac': '0'}
+  const structuredDatabaseEntryWithDgfipLabels = transform(
+    databaseEntryWithDgfipLabels,
+    (result, value, key) => set(result, key, value),
+    {},
+  );
+  // { nbPart: '3', rfr: '15000', pac: { nbPac: '0' } }
+
+  // add formatted address field
+  if (databaseEntry.adresseFiscaleDeTaxationVoie) {
+    structuredDatabaseEntryWithDgfipLabels.aft = [
+      databaseEntry.adresseFiscaleDeTaxationComplementAdresse,
+      databaseEntry.adresseFiscaleDeTaxationVoie,
+      databaseEntry.adresseFiscaleDeTaxationCodePostal,
+      databaseEntry.adresseFiscaleDeTaxationCommune,
+    ].join(' ');
   }
 
-  const formatedDatabaseEntry = clone(databaseEntry);
-
-  formatedDatabaseEntry.adresseFiscaleDeTaxationDetail = zipObject(
-    ['voie', 'complementAdresse', 'codePostal', 'commune'],
-    databaseEntry.adresseFiscaleDeTaxation.split(','),
-  );
-
-  return formatedDatabaseEntry;
+  return structuredDatabaseEntryWithDgfipLabels;
 };
 
 /**

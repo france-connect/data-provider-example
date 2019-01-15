@@ -41,7 +41,7 @@ export const validTokenConf = {
   token: '9af033eb295d0fe113988d29a26527f920114973b3a1ca7bdb44768fd0c73937',
   reponseHttpStatusCode: 200,
   responseBody: {
-    scope: ['openid', 'profile', 'birth', 'dgfip_revenu_fiscal_de_reference_n_moins_1', 'dgfip_nbpac', 'dgfip_nbpacf'],
+    scope: ['openid', 'profile', 'birth', 'dgfip_rfr', 'dgfip_nbpac', 'dgfip_nbpacf'],
     ...defaultResponseBody,
   },
 };
@@ -61,7 +61,7 @@ export const validTokenRfrScopeConf = {
   token: '9af033eb295d0fe113988d29a26527f920114973b3a1ca7bdb44768fd0c73939',
   responseHttpStatusCode: 200,
   responseBody: {
-    scope: ['dgfip_revenu_fiscal_de_reference_n_moins_1'],
+    scope: ['dgfip_rfr'],
     ...defaultResponseBody,
   },
 };
@@ -70,7 +70,7 @@ export const validTokenAftScopeConf = {
   token: '9af033eb295d0fe113988d29a26527f920114973b3a1ca7bdb44768fd0c73940',
   responseHttpStatusCode: 200,
   responseBody: {
-    scope: ['dgfip_adresse_fiscale_de_taxation_n_moins_1'],
+    scope: ['dgfip_aft'],
     ...defaultResponseBody,
   },
 };
