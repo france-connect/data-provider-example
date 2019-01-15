@@ -22,9 +22,9 @@ describe('isAuthorized', () => {
 describe('filter', () => {
   it('should filter data according to user scopes', () => {
     const databaseEntry = {
-      dataNotToBeReturn: 0,
-      nombreDePersonnesACharge: 0,
-      nombreDePersonnesAChargeF: 0,
+      dataNotToBeReturn: '0',
+      nombreDePersonnesACharge: '0',
+      nombreDePersonnesAChargeF: '0',
     };
 
     const userScopes = ['scope_1', 'scope_2', 'dgfip_nbpac'];
@@ -34,44 +34,73 @@ describe('filter', () => {
 
   it('should return data when different scopes refer to the same properties', () => {
     const databaseEntry = {
-      dataNotToBeReturn: 0,
-      nombreDePersonnesACharge: 0,
-      nombreDePersonnesAChargeF: 0,
+      dataNotToBeReturn: '0',
+      nombreDePersonnesACharge: '0',
+      nombreDePersonnesAChargeF: '0',
     };
 
     const userScopes = ['dgfip_nbpac', 'dgfip_nbpacf'];
 
     expect(filter(userScopes, databaseEntry)).to.deep.equal({
-      nombreDePersonnesACharge: 0,
-      nombreDePersonnesAChargeF: 0,
+      nombreDePersonnesACharge: '0',
+      nombreDePersonnesAChargeF: '0',
     });
   });
 });
 
 describe('format', () => {
-  it('should add a detailed address object in the result', () => {
+  it('should return dgfip labels from database entry labels', () => {
     const databaseEntry = {
-      adresseFiscaleDeTaxation: '20 avenue de Ségur,,75007,Paris',
+      revenuFiscalDeReference: '12345',
     };
 
     expect(format(databaseEntry)).to.deep.equal({
-      adresseFiscaleDeTaxation: '20 avenue de Ségur,,75007,Paris',
-      adresseFiscaleDeTaxationDetail: {
+      rfr: '12345',
+    });
+  });
+
+  it('should structure data within sub-objects', () => {
+    const databaseEntry = {
+      adresseFiscaleDeTaxationComplementAdresse: '',
+      adresseFiscaleDeTaxationVoie: '20 avenue de Ségur',
+      adresseFiscaleDeTaxationCodePostal: '75007',
+      adresseFiscaleDeTaxationCommune: 'Paris',
+      nombreDePersonnesACharge: '0',
+      nombreDePersonnesAChargeF: '0',
+      nombreDePersonnesAChargeH: '0',
+      nombreDePersonnesAChargeR: '0',
+      nombreDePersonnesAChargeJ: '0',
+      nombreDePersonnesAChargeN: '0',
+      nombreDePersonnesAChargeP: '0',
+    };
+
+    expect(format(databaseEntry)).to.deep.equal({
+      aft: ' 20 avenue de Ségur 75007 Paris',
+      aftDetail: {
         codePostal: '75007',
         commune: 'Paris',
         complementAdresse: '',
         voie: '20 avenue de Ségur',
       },
+      pac: {
+        nbPac: '0',
+        nbPacF: '0',
+        nbPacH: '0',
+        nbPacJ: '0',
+        nbPacN: '0',
+        nbPacP: '0',
+        nbPacR: '0',
+      },
     });
   });
 
-  it('should not modify object if no address is provided', () => {
+  it('should not modify object with attributes that does not have a dgfip label', () => {
     const databaseEntry = {
-      dataNotToBeModified: 0,
+      dataNotToBeModified: '0',
     };
 
     expect(format(databaseEntry)).to.deep.equal({
-      dataNotToBeModified: 0,
+      dataNotToBeModified: '0',
     });
   });
 });

@@ -26,8 +26,9 @@ app.use('/api', checkAccessToken);
 app.get('/', healthCheck);
 app.get('/api/dgfip', getDgfipData);
 
-// The following route is used for backward compatibility purpose (eg. /api/dgfip/OS1/2017/)
-app.get('/api/dgfip/*', getDgfipData);
+// The following route is an alias to be iso with the DGFiP production API
+// Note that we do not use the annee parameter to keep this codebase as simple as possible
+app.get('/situations/ir/assiettes/annrev/:annee', checkAccessToken, getDgfipData);
 
 // Starting server
 const port = process.env.PORT || '4000';

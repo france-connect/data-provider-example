@@ -45,15 +45,16 @@ describe('GET /api/dgfip', () => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.deep.equal({
-          nombreDeParts: '3',
-          revenuFiscalDeReference: '15000',
-          nombreDePersonnesAChargeH: '0',
-          nombreDePersonnesAChargeJ: '0',
-          nombreDePersonnesAChargeN: '0',
-          nombreDePersonnesAChargeP: '0',
-          nombreDePersonnesAChargeF: '0',
-          nombreDePersonnesACharge: '0',
-          nombreDePersonnesAChargeR: '0',
+          rfr: '15000',
+          pac: {
+            nbPacH: '0',
+            nbPacJ: '0',
+            nbPacN: '0',
+            nbPacP: '0',
+            nbPacF: '0',
+            nbPac: '0',
+            nbPacR: '0',
+          },
         });
         done();
       });

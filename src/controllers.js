@@ -27,7 +27,7 @@ export const getDgfipData = async (req, res) => {
     matchedDatabaseEntry,
   );
 
-  // Optional step : we format the final json to be more developer friendly
+  // Optional step: we format the final json to be iso with the DGFiP production API
   const formatedDatabaseEntry = format(allowedDatabaseEntry);
 
   return res.json(formatedDatabaseEntry);
