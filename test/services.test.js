@@ -9,13 +9,13 @@ describe('isAuthorized', () => {
   it('should return not authorized for insufficient scope', () => {
     const notAuthorizedToken = { scope: ['scope_1', 'scope_2'] };
 
-    expect(isAuthorized(notAuthorizedToken)).to.be.false;
+    expect(isAuthorized(notAuthorizedToken.scope)).to.be.false;
   });
 
   it('should return authorized', () => {
     const notAuthorizedToken = { scope: ['scope_1', 'scope_2', 'dgfip_nbpac'] };
 
-    expect(isAuthorized(notAuthorizedToken)).to.be.true;
+    expect(isAuthorized(notAuthorizedToken.scope)).to.be.true;
   });
 });
 

@@ -1,34 +1,65 @@
 import { isEmpty } from 'lodash';
+import axios from 'axios';
 import {
   isAuthorized, filter, format, reconcile,
 } from './services';
+import { getAccessTokenFromAuthorizationHeader } from './utils';
+import { FC_URL } from '../config';
 
 export const healthCheck = (req, res) => res.sendStatus(200);
 
-export const getDgfipData = async (req, res) => {
-  // First step: we make sure the user is authorized to read data from DGFIP
-  if (!isAuthorized(req.fcToken)) {
-    // In this case, the Fournisseur de Service as call the Fournisseur de Données with a user that
-    // does not have enough scopes to access any data
-    return res.sendStatus(403);
+export const getDgfipData = async (req, res, next) => {
+  try {
+    // First step: check that the user actually send an access token
+    const accessToken = getAccessTokenFromAuthorizationHeader(req);
+    if (!accessToken) {
+      return res.sendStatus(400);
+    }
+
+    // Second step: check the access token validity against Franceconnect
+    const { data: { scope, identity } } = await axios({
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      data: { token: accessToken },
+      url: `${FC_URL}/api/v1/checktoken`,
+    });
+
+    // Third step: we make sure the user is authorized to read data from DGFiP
+    // ie. he asks for DGFiP scopes
+    if (!isAuthorized(scope)) {
+      // In this case, the Fournisseur de Service as call the Fournisseur de Données with an
+      // accessToken that does not have enough scopes to access any data
+      return res.sendStatus(403);
+    }
+
+    // Fourth step: we get the data that match the France Connect user
+    const matchedDatabaseEntry = await reconcile(identity);
+
+    if (isEmpty(matchedDatabaseEntry)) {
+      // In this case, our database did not find any matching data
+      return res.sendStatus(404);
+    }
+
+    // Fifth step: we filter the data so it returns only the data allowed for the given scope
+    const allowedDatabaseEntry = filter(
+      scope,
+      matchedDatabaseEntry,
+    );
+
+    // Optional step: we format the final json to be iso with the DGFiP production API
+    const formatedDatabaseEntry = format(allowedDatabaseEntry);
+
+    return res.json(formatedDatabaseEntry);
+  } catch (error) {
+    // the Franceconnect server may be down or did not respond
+    if (error.request && !error.response) {
+      return res.sendStatus(502);
+    }
+
+    if (error.response && error.response.status >= 400) {
+      return res.status(error.response.status).send(error.response.data);
+    }
+
+    return next(error); // use express default error handler
   }
-
-  // Second step: we get the data that match the France Connect user
-  const matchedDatabaseEntry = await reconcile(req.fcToken.identity);
-
-  if (isEmpty(matchedDatabaseEntry)) {
-    // In this case, our database did not find any matching data
-    return res.sendStatus(404);
-  }
-
-  // Third step: we filter the data so it returns only the data allowed for the given scope
-  const allowedDatabaseEntry = filter(
-    req.fcToken.scope,
-    matchedDatabaseEntry,
-  );
-
-  // Optional step: we format the final json to be iso with the DGFiP production API
-  const formatedDatabaseEntry = format(allowedDatabaseEntry);
-
-  return res.json(formatedDatabaseEntry);
 };
