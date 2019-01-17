@@ -1,10 +1,17 @@
 import { isEmpty } from 'lodash';
 import axios from 'axios';
+import axiosLogger from 'axios-logger';
 import {
   isAuthorized, filter, format, reconcile,
 } from './services';
 import { getAccessTokenFromAuthorizationHeader } from './utils';
 import { FC_URL } from '../config';
+
+const httpClient = axios.create();
+if (process.env.NODE_ENV !== 'test') {
+  httpClient.interceptors.request.use(axiosLogger.requestLogger, axiosLogger.errorLogger);
+  httpClient.interceptors.response.use(axiosLogger.responseLogger, axiosLogger.errorLogger);
+}
 
 export const healthCheck = (req, res) => res.sendStatus(200);
 
@@ -17,7 +24,7 @@ export const getDgfipData = async (req, res, next) => {
     }
 
     // Second step: check the access token validity against Franceconnect
-    const { data: { scope, identity } } = await axios({
+    const { data: { scope, identity } } = await httpClient({
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       data: { token: accessToken },
