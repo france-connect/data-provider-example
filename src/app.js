@@ -1,15 +1,14 @@
 import express from 'express';
 import logger from 'morgan';
 
-import checkAccessToken from './middlewares';
 import { initializeMock } from '../mock/france-connect';
 import { healthCheck, getDgfipData } from './controllers';
-import config from '../config';
+import { USE_FC_MOCK, FC_URL } from '../config';
 
-if (config.env === 'local' && config.useFcMock === true) {
+if (USE_FC_MOCK === true) {
   initializeMock();
 } else {
-  console.log('\x1b[31m%s\x1b[0m', `Remote loop mode activated: this server will hit ${config.fcHost}`); // eslint-disable-line no-console
+  console.log('\x1b[31m%s\x1b[0m', `Remote loop mode activated: this server will hit ${FC_URL}`); // eslint-disable-line no-console
 }
 
 const app = express();
@@ -20,7 +19,6 @@ if (process.env.NODE_ENV !== 'test') {
 }
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/api', checkAccessToken);
 
 // Setup routing (see https://expressjs.com/en/guide/routing.html)
 app.get('/', healthCheck);
@@ -28,7 +26,7 @@ app.get('/api/dgfip', getDgfipData);
 
 // The following route is an alias to be iso with the DGFiP production API
 // Note that we do not use the annee parameter to keep this codebase as simple as possible
-app.get('/situations/ir/assiettes/annrev/:annee', checkAccessToken, getDgfipData);
+app.get('/situations/ir/assiettes/annrev/:annee', getDgfipData);
 
 // Starting server
 const port = process.env.PORT || '4000';

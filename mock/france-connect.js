@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock';
-import config from '../config';
+import { FC_URL } from '../config';
 
 const defaultResponseBody = {
   identity: {
@@ -94,9 +94,9 @@ export const initializeMock = () => {
     validTokenAftScopeConf, malformedTokenConf, expiredTokenConf,
   ]
     .forEach(({ token, responseHttpStatusCode, responseBody }) => {
-      nock(config.fcHost)
+      nock(FC_URL)
         .persist()
-        .post(config.checkTokenPath, { token })
+        .post('/api/v1/checktoken', { token })
         .reply(responseHttpStatusCode, responseBody);
     });
 };

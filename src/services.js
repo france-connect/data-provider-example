@@ -25,7 +25,7 @@ const SCOPE_TO_PROPERTIES = {
  * @param { scope }
  * @returns boolean
  */
-export const isAuthorized = ({ scope }) => {
+export const isAuthorized = (scope) => {
   const authorizedScopes = Object.keys(SCOPE_TO_PROPERTIES);
 
   return !isEmpty(intersection(scope, authorizedScopes));
