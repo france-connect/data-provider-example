@@ -7,16 +7,15 @@ import {
 } from './utils';
 
 const SCOPE_TO_PROPERTIES = {
-  // These 2 scopes are fictitious and are meant to be used for experimentation purpose.
-  dgfip_nbpac: ['nombreDePersonnesACharge', 'nombreDePersonnesAChargeF', 'nombreDePersonnesAChargeH', 'nombreDePersonnesAChargeR', 'nombreDePersonnesAChargeJ', 'nombreDePersonnesAChargeN', 'nombreDePersonnesAChargeP'],
-  dgfip_nbpacf: ['nombreDePersonnesAChargeF'],
-
   // These 5 scopes are the official DGFIP scopes
   dgfip_rfr: ['revenuFiscalDeReference'], // DGFIP - Revenu fiscal de référence (RFR)
   dgfip_nbpart: ['nombreDeParts'], // DGFIP - nombre de parts
   dgfip_sitfam: ['situationDeFamille'], // DGFIP - situation de famille
   dgfip_pac: ['nombreDePersonnesACharge', 'nombreDePersonnesAChargeF', 'nombreDePersonnesAChargeH', 'nombreDePersonnesAChargeR', 'nombreDePersonnesAChargeJ', 'nombreDePersonnesAChargeN', 'nombreDePersonnesAChargeP'], // DGFIP - composition du foyer fiscal
   dgfip_aft: ['adresseFiscaleDeTaxation'], // DGFIP - adresse fiscale de taxation au 1er janvier
+
+  // This scope is fictitious and is meant to be used for experimentation purpose.
+  dgfip_pacf: ['nombreDePersonnesAChargeF'],
 };
 
 /**
@@ -43,7 +42,7 @@ export const filter = (userScopes, databaseEntry) => {
   const filteringScopes = intersection(userScopes, authorizedScopes);
 
   const propertiesToReturn = _(filteringScopes)
-    // ['dgfip_nbpac',  'dgfip_nbpacf']
+    // ['dgfip_pac',  'dgfip_pacf']
     .map(scope => SCOPE_TO_PROPERTIES[scope])
     // [
     //   ['nombreDePersonnesACharge', ..., 'nombreDePersonnesAChargeP'],

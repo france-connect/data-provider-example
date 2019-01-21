@@ -13,7 +13,7 @@ describe('isAuthorized', () => {
   });
 
   it('should return authorized', () => {
-    const notAuthorizedToken = { scope: ['scope_1', 'scope_2', 'dgfip_nbpac'] };
+    const notAuthorizedToken = { scope: ['scope_1', 'scope_2', 'dgfip_pac'] };
 
     expect(isAuthorized(notAuthorizedToken.scope)).to.be.true;
   });
@@ -27,7 +27,7 @@ describe('filter', () => {
       nombreDePersonnesAChargeF: '0',
     };
 
-    const userScopes = ['scope_1', 'scope_2', 'dgfip_nbpac'];
+    const userScopes = ['scope_1', 'scope_2', 'dgfip_pac'];
 
     expect(filter(userScopes, databaseEntry).dataNotToBeReturn).to.be.undefined;
   });
@@ -39,7 +39,7 @@ describe('filter', () => {
       nombreDePersonnesAChargeF: '0',
     };
 
-    const userScopes = ['dgfip_nbpac', 'dgfip_nbpacf'];
+    const userScopes = ['dgfip_pac', 'dgfip_pacf'];
 
     expect(filter(userScopes, databaseEntry)).to.deep.equal({
       nombreDePersonnesACharge: '0',
