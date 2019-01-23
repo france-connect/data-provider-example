@@ -41,7 +41,7 @@ export const validTokenConf = {
   token: '9af033eb295d0fe113988d29a26527f920114973b3a1ca7bdb44768fd0c73937',
   reponseHttpStatusCode: 200,
   responseBody: {
-    scope: ['openid', 'profile', 'birth', 'dgfip_rfr', 'dgfip_pac', 'dgfip_pacf'],
+    scope: ['openid', 'profile', 'birth', 'dgfip_rfr', 'dgfip_pac', 'dgfip_pacf', 'dgfip_aft'],
     ...defaultResponseBody,
   },
 };

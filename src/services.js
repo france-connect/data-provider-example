@@ -12,7 +12,7 @@ const SCOPE_TO_PROPERTIES = {
   dgfip_nbpart: ['nombreDeParts'], // DGFIP - nombre de parts
   dgfip_sitfam: ['situationDeFamille'], // DGFIP - situation de famille
   dgfip_pac: ['nombreDePersonnesACharge', 'nombreDePersonnesAChargeF', 'nombreDePersonnesAChargeH', 'nombreDePersonnesAChargeR', 'nombreDePersonnesAChargeJ', 'nombreDePersonnesAChargeN', 'nombreDePersonnesAChargeP'], // DGFIP - composition du foyer fiscal
-  dgfip_aft: ['adresseFiscaleDeTaxation'], // DGFIP - adresse fiscale de taxation au 1er janvier
+  dgfip_aft: ['adresseFiscaleDeTaxationComplementAdresse', 'adresseFiscaleDeTaxationVoie', 'adresseFiscaleDeTaxationCodePostal', 'adresseFiscaleDeTaxationCommune'], // DGFIP - adresse fiscale de taxation au 1er janvier
 
   // This scope is fictitious and is meant to be used for experimentation purpose.
   dgfip_pacf: ['nombreDePersonnesAChargeF'],
