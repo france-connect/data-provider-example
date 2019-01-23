@@ -1,12 +1,12 @@
 import moment from 'moment';
 
-export const getAccessTokenFromAuthorizationHeader = (req) => {
-  if (!req.header('Authorization')) {
+export const getAccessTokenFromAuthorizationHeader = (authorizationHeader) => {
+  if (!authorizationHeader) {
     return null;
   }
 
-  const authorizationHeaderParts = req.header('Authorization').split(' ');
-  if (authorizationHeaderParts.length !== 2 || authorizationHeaderParts[0] !== 'Bearer') {
+  const authorizationHeaderParts = authorizationHeader.split(' ');
+  if (authorizationHeaderParts.length !== 2 || !['Bearer', 'Bearer:'].includes(authorizationHeaderParts[0])) {
     return null;
   }
 

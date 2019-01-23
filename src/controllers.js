@@ -18,7 +18,7 @@ export const healthCheck = (req, res) => res.sendStatus(200);
 export const getDgfipData = async (req, res, next) => {
   try {
     // First step: check that the user actually send an access token
-    const accessToken = getAccessTokenFromAuthorizationHeader(req);
+    const accessToken = getAccessTokenFromAuthorizationHeader(req.header('Authorization'));
     if (!accessToken) {
       return res.sendStatus(400);
     }
