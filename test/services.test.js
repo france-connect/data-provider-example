@@ -63,8 +63,8 @@ describe('format', () => {
     const databaseEntry = {
       adresseFiscaleDeTaxationComplementAdresse: '',
       adresseFiscaleDeTaxationVoie: '20 avenue de Ségur',
-      adresseFiscaleDeTaxationCodePostal: '75007',
-      adresseFiscaleDeTaxationCommune: 'Paris',
+      adresseFiscaleDeTaxationCodePostal: '75007 Paris',
+      adresseFiscaleDeTaxationCommune: '',
       nombreDePersonnesACharge: '0',
       nombreDePersonnesAChargeF: '0',
       nombreDePersonnesAChargeH: '0',
@@ -77,9 +77,9 @@ describe('format', () => {
     expect(format(databaseEntry)).to.deep.equal({
       aft: ' 20 avenue de Ségur 75007 Paris',
       aftDetail: {
-        codePostal: '75007',
-        commune: 'Paris',
-        complementAdresse: '',
+        codePostal: '75007 Paris',
+        commune: null,
+        complementAdresse: null,
         voie: '20 avenue de Ségur',
       },
       pac: {

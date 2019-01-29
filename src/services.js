@@ -94,18 +94,18 @@ const DGFIP_LABELS = {
 };
 
 export const format = (databaseEntry) => {
-  //   { nombreDeParts: '3', revenuFiscalDeReference: '15000', nombreDePersonnesACharge: '0' }
+  // { nombreDeParts: '3', revenuFiscalDeReference: '', nombreDePersonnesACharge: '0' }
   const databaseEntryWithDgfipLabels = mapKeys(
     databaseEntry,
     (value, key) => DGFIP_LABELS[key] || key,
   );
-  // { nbPart: '3', rfr: '15000', 'pac.nbPac': '0'}
+  // { nbPart: '3', rfr: '', 'pac.nbPac': '0'}
   const structuredDatabaseEntryWithDgfipLabels = transform(
     databaseEntryWithDgfipLabels,
-    (result, value, key) => set(result, key, value),
+    (result, value, key) => set(result, key, value !== '' ? value : null),
     {},
   );
-  // { nbPart: '3', rfr: '15000', pac: { nbPac: '0' } }
+  // { nbPart: '3', rfr: null, pac: { nbPac: '0' } }
 
   // add formatted address field
   if (databaseEntry.adresseFiscaleDeTaxationVoie) {
@@ -113,7 +113,6 @@ export const format = (databaseEntry) => {
       databaseEntry.adresseFiscaleDeTaxationComplementAdresse,
       databaseEntry.adresseFiscaleDeTaxationVoie,
       databaseEntry.adresseFiscaleDeTaxationCodePostal,
-      databaseEntry.adresseFiscaleDeTaxationCommune,
     ].join(' ');
   }
 

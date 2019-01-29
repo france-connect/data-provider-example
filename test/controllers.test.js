@@ -118,9 +118,9 @@ describe('GET /api/dgfip', () => {
         expect(res.body).to.deep.equal({
           aft: ' 10 PLACE CONSTANTIN BRANCUSI 75014 PARIS',
           aftDetail: {
-            codePostal: '75014',
-            commune: 'PARIS',
-            complementAdresse: '',
+            codePostal: '75014 PARIS',
+            commune: null,
+            complementAdresse: null,
             voie: '10 PLACE CONSTANTIN BRANCUSI',
           },
           rfr: '15000',
