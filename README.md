@@ -1,8 +1,17 @@
 # data-provider-example
 
-An example of Data Provider for FranceConnect.
+Exemple de fournisseur de données pour FranceConnect.
 
-The way a data provider works is explained in [FranceConnect documentation](https://partenaires.franceconnect.gouv.fr/fcp/fournisseur-donnees).
+Ce projet a les objectifs suivants :
+
+- fournir un exemple de code JavaScript simple compréhensible par des développeurs sans connaissance spécifique de JavaScript
+- fournir un exemple de code qui peut être installé localement et simplement pour permettre une bonne compréhension des appels émis et reçu par l'application
+- fournir un environnement de test pour l'API Impôt DGFiP FranceConnectée.
+- permettre une consultation et une édition des données à des non développeurs
+
+C'est grâce à vos retours que ce projet peut s'améliorer, aussi n'hésitez pas à [ouvrir des issues github](https://github.com/france-connect/data-provider-example/issues/new) pour nous suggérer vos idées.
+
+Le fonctionnement d'un fournisseur de données est expliqué dans la [documentation FranceConnect](https://partenaires.franceconnect.gouv.fr/fcp/fournisseur-donnees).
 
 ## Standalone installation
 
