@@ -33,7 +33,7 @@ npm start
 
 Note that the previous installation use a local mock of FranceConnect integration server.
 
-If you are to use this app alongside the [service provider example](https://github.com/france-connect/identity-provider-example),
+If you are to use this app alongside the [service provider example](https://github.com/france-connect/service-provider-example),
 run the server with `USE_FC_MOCK=false npm start`.
 
 By doing this you will tell the app to remotely verify the tokens against the actual FranceConnect integration server.
