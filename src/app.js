@@ -1,5 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
+import cors from 'cors';
 
 import { initializeMock } from '../mock/france-connect';
 import { healthCheck, getDgfipData } from './controllers';
@@ -12,6 +13,10 @@ if (USE_FC_MOCK === true) {
 }
 
 const app = express();
+
+// allow all CORS request as data are public and we might want to fetch data from external sites
+// (ex: swagger on https://api.gouv.fr/api/impot-particulier.html)
+app.use(cors());
 
 // Setup express middlewares (see https://expressjs.com/en/guide/writing-middleware.html)
 if (process.env.NODE_ENV !== 'test') {
