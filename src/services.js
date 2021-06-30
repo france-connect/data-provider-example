@@ -16,6 +16,7 @@ const SCOPE_TO_PROPERTIES = {
 
   // This scope is fictitious and is meant to be used for experimentation purpose.
   dgfip_pacf: ['nombreDePersonnesAChargeF'],
+  cnam_paiements_ij: ['paiementsIndemnitesJournalieresVersesParAssuranceMaladie'],
 };
 
 /**
@@ -91,6 +92,7 @@ const DGFIP_LABELS = {
   nombreDePersonnesAChargeJ: 'pac.nbPacJ',
   nombreDePersonnesAChargeN: 'pac.nbPacN',
   nombreDePersonnesAChargeP: 'pac.nbPacP',
+  paiementsIndemnitesJournalieresVersesParAssuranceMaladie: 'cnam.paiements_ij',
 };
 
 export const format = (databaseEntry) => {
